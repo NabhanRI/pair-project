@@ -7,7 +7,7 @@ const port = 3000
 
 
 app.set("view engine", "ejs")
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 
 // express session
 const session = require("express-session");
@@ -19,12 +19,49 @@ app.use(session({
   cookie: { secure: false }
 }));
 
-// ? LOGIN & REGISTER (GET & POST)
+// ! AUTHENTICATION & PROFILE
+// ? LOGIN
 app.get('/', AuthController.login)
-app.post('/login', AuthController.handleLogin);
+app.post('/login', AuthController.postLogin);
+// ? Register
+app.get('/register', AuthController.register)
+app.post('/register', AuthController.postRegister)
+// ? Logout
+app.get('/logout', AuthController.logout);
+// ? Profile
+app.get('/profile', AuthController.showProfile)
 
-
+// ! LANDING PAGE
 // ? (GET) Home
+app.get('/home', HomeController.home)
+
+// ? (GET & POST) ADD
+app.get('/home/add', HomeController.getAdd)
+app.post('/home/add', HomeController.postAdd)
+
+// ? (GET) Detail Course
+app.get('/home/courses/:id', HomeController.courseDetail)
+
+// ? (GET) EDIT Course
+app.get('/home/courses/:id/edit', (req, res) => {
+  res.send('Hello World!')
+})
+
+// ? (POST) EDIT Course
+app.post('/home/courses/:id/edit', (req, res) => {
+  res.send('Hello World!')
+})
+
+// ? (GET) DELETE Course
+app.get('/home/courses/:id/delete', (req, res) => {
+  res.send('Hello World!')
+})
+
+// ! USER (STUDENT)
+// ? (GET) Transaction
+app.get('/home/courses/:id/transaction', (req, res) => {
+  res.send('Hello World!')
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
