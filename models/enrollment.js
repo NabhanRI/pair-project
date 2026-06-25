@@ -10,8 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      
+      // Menghubungkan Junction Table ke User
+      Enrollment.belongsTo(models.User, { foreignKey: 'UserId' });
+
+      // Menghubungkan Junction Table ke Course
+      Enrollment.belongsTo(models.Course, { foreignKey: 'CourseId' });
     }
   }
   Enrollment.init({

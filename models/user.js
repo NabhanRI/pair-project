@@ -10,14 +10,27 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // One-to-One: User memiliki satu UserProfile
+      User.belongsTo(models.Profile, { foreignKey: 'ProfileId' });
+
+      // One-to-Many: User memiliki banyak Enrollment
+      User.hasMany(models.Enrollment, { foreignKey: 'UserId' });
+
+      // Many-to-Many: User (Student) bisa memiliki banyak Course melalui tabel Enrollment
+      User.belongsToMany(models.Course, {
+        through: models.Enrollment,
+        foreignKey: 'UserId'
+      });
+
+      // One-to-Many: User (student) bisa melakukan banyak transaction
+      User.hasMany(models.Transaction, { foreignKey: 'UserId' });
     }
   }
   User.init({
     email: DataTypes.STRING,
     username: DataTypes.STRING,
     password: DataTypes.STRING,
-    role: DataTypes.ENUM,
+    role: DataTypes.STRING,
     ProfileId: DataTypes.INTEGER
   }, {
     sequelize,

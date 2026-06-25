@@ -3,29 +3,34 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addConstraint('Transaction', 'UserId', {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'id'
+
+    await queryInterface.addConstraint('Transactions', {
+      fields: ['UserId'],
+      type: 'foreign key',
+      name: 'fk_transactions_userid',
+      references: { 
+        table: 'Users', 
+        field: 'id' 
       },
       onUpdate: 'cascade',
       onDelete: 'cascade'
     });
 
-    await queryInterface.addConstraint('Transaction', 'CourseId', {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'Courses',
-        key: 'id'
+    await queryInterface.addConstraint('Transactions', {
+      fields: ['CourseId'],
+      type: 'foreign key',
+      name: 'fk_transactions_courseid',
+      references: { 
+        table: 'Courses', 
+        field: 'id' 
       },
-      onUpdate: 'cascade',
-      onDelete: 'cascade'
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('Transactions', 'UserId');
-    await queryInterface.removeConstraint('Transactions', 'CourseId');
+    await queryInterface.removeConstraint('Transactions', 'fk_transactions_userid');
+    await queryInterface.removeConstraint('Transactions', 'fk_transactions_courseid');
   }
 };
