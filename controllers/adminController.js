@@ -102,22 +102,22 @@ class AdminController {
 
    //? (GET) delete course
    static async deleteCourse(req, res) {
-      try {
-         const { id } = req.params;
+      const { id } = req.params;
 
-         const course = await Course.findByPk(id);
-
+   Course.findByPk(id)
+      .then(course => {
          if (!course) {
-            return res.redirect('/home?error=Course tidak ditemukan');
+            throw new Error('Course tidak ditemukan');
          }
 
-         await course.destroy();
-
-         res.redirect('/home');
-      } catch (error) {
-         // console.log(error);
-         res.send(error);
-      }
+         return course.destroy();
+      })
+      .then(() => {
+         res.redirect('/home?success=Course berhasil dihapus');
+      })
+      .catch(error => {
+         res.redirect(`/home?error=${error.message}`);
+      });
    }
 }
 
