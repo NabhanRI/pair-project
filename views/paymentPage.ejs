@@ -46,18 +46,14 @@
             box-shadow: 12px 12px 0 var(--ink);
         }
 
-        .qr-box {
+        .qr-img {
             width: 240px;
             height: 240px;
+            object-fit: cover;
             border: 4px solid var(--ink);
             box-shadow: 6px 6px 0 var(--ink);
-            background: repeating-linear-gradient(
-                45deg,
-                #000,
-                #000 10px,
-                #fff 10px,
-                #fff 20px
-            );
+            background: #fff;
+            display: block;
             margin: 0 auto;
         }
     </style>
@@ -74,14 +70,14 @@
                     Selesaikan pembayaran untuk course <%= course.title %>
                 </p>
 
-                <div class="qr-box mb-4"></div>
+                <img src="/assets/qrcode.png" alt="QR Pembayaran" class="qr-img mb-4">
 
                 <div class="mb-4">
                     <p class="mb-2"><strong>Invoice:</strong> <%= transaction.invoiceNumber %></p>
                     <p class="mb-0"><strong>Total:</strong> Rp <%= Number(transaction.totalAmount).toLocaleString('id-ID') %></p>
                 </div>
 
-                <form action="/home/courses/<%= course.id %>/transaction/pay" method="POST">
+                <form action="/home/courses/<%= course.id %>/transaction/finish" method="POST">
                     <button type="submit" class="brutal-btn text-dark"
                         style="background: var(--green); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
                         SELESAI BAYAR

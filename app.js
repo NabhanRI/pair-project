@@ -9,6 +9,8 @@ const port = 3000
 
 app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: true }))
+// buat nampilin qr
+app.use(express.static('public'))
 
 // express session
 const session = require("express-session");

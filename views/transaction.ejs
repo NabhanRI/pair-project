@@ -292,7 +292,7 @@
                         <div class="detail-value">
                             <span
                                 class="status-badge <%= transaction.paymentStatus === 'paid' ? 'status-paid' : 'status-unpaid' %>">
-                                <%= transaction.paymentStatus==='paid' ? 'Sudah Lunas' : 'Belum Lunas' %>
+                                <%= transaction.paymentStatus === 'paid' ? 'Sudah Lunas' : 'Belum Lunas' %>
                             </span>
                         </div>
                     </div>
@@ -307,18 +307,18 @@
                                 Rp <%= Number(transaction.totalAmount).toLocaleString('id-ID') %>
                             </div>
                         </div>
-
+                        <!-- button penentu -->
                         <div class="d-flex gap-2 flex-wrap">
                             <% if (transaction.paymentStatus === 'paid' ) { %>
                                 <a href="/home/courses/<%= course.id %>/invoice" target="_blank"
                                     class="brutal-btn text-dark"
-                                    style="background: var(--blue); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
-                                    LIHAT INVOICE
+                                    style="background: var(--pink); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
+                                    PRINT INVOICE
                                 </a>
                                 <% } else { %>
                                     <form action="/home/courses/<%= course.id %>/transaction" method="POST" class="m-0">
                                         <button type="submit" class="brutal-btn text-dark"
-                                            style="background: var(--green); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
+                                            style="background: var(--red); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
                                             BAYAR SEKARANG
                                         </button>
                                     </form>
