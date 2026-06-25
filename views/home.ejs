@@ -260,9 +260,9 @@
    <main class="container py-4 flex-grow-1">
 
       <section class="search-container">
-         <h2 class="mb-3 text-white" style="text-shadow: 2px 2px 0 var(--ink);">Cari Buku Incaranmu!</h2>
+         <h2 class="mb-3 text-white" style="text-shadow: 2px 2px 0 var(--ink);">Cari Kursus Incaranmu!</h2>
          <form class="search-form" action="/home" method="GET">
-            <input type="text" name="search" class="search-input" placeholder="Ketik judul buku atau penulis...">
+            <input type="text" name="search" class="search-input" placeholder="Ketik judul kursus...">
             <button type="submit" class="brutal-btn">CARI</button>
          </form>
       </section>
@@ -270,14 +270,14 @@
       <div class="d-flex justify-content-between align-items-end mb-4">
          <h2
             style="font-size: 2.2rem; background: var(--green); display: inline-block; padding: 0.2rem 0.8rem; border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);">
-            Rekomendasi Course
+            Rekomendasi Kursus
          </h2>
 
          <!-- LOGIKA RENDER KHUSUS ADMIN -->
          <% if (user && user.role==='admin' ) { %>
             <a href="/home/add" class="brutal-btn text-decoration-none text-dark"
                style="background: var(--yellow); padding: 0.6rem 1.2rem; font-size: 1.1rem;">
-               + TAMBAH COURSE
+               + TAMBAH KURSUS
             </a>
             <% } %>
       </div>

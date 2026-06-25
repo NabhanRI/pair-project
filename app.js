@@ -16,7 +16,9 @@ app.use(session({
   secret: 'rahasia-negara-jskuy', // Bebas diisi string apa saja untuk enkripsi session
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }
+  cookie: {
+    maxAge: 1000 * 60 * 30
+  }
 }));
 
 // ! AUTHENTICATION & PROFILE

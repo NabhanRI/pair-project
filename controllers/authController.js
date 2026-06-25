@@ -82,13 +82,17 @@ class AuthController {
    // ? (GET) Logout
    static logout(req, res) {
       // Menghancurkan session yang sedang aktif
-      req.session.destroy((err) => {
-         if (err) {
-            return res.send(err);
-         }
-         // Jika berhasil hancur, kembalikan ke halaman login
-         res.redirect('/');
-      });
+      try {
+         req.session.destroy((err) => {
+            if (err) {
+               return res.send(err);
+            }
+            // Jika berhasil hancur, kembalikan ke halaman login
+            res.redirect('/');
+         });
+      } catch (error) {
+         res.send(error)
+      }
    }
 
    // ? (GET) Show Profile
