@@ -3,18 +3,20 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addConstraint('Users', 'ProfileId', {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'Profiles',
-        key: 'id'
+    await queryInterface.addConstraint('Users', {
+      fields: ['ProfileId'],
+      type: 'foreign key',
+      name: 'fk_users_profileid',
+      references: { 
+        table: 'Profiles',
+        field: 'id' 
       },
-      onUpdate: 'cascade',
-      onDelete: 'cascade'
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('Users', 'ProfileId');
+    await queryInterface.removeConstraint('Users', 'fk_users_profileid');
   }
 };

@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // One-to-Many: Banyak Transaction bisa dilakukan oleh User(student)
+      Transaction.belongsTo(models.User, { foreignKey: 'UserId' });
+
+      // One-to-Many: Banyak Transaction mengarah ke satu Course (course yang dibeli)
+      Transaction.belongsTo(models.Course, { foreignKey: 'CourseId' });
     }
   }
   Transaction.init({
