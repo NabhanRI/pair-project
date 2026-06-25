@@ -93,7 +93,7 @@ class AdminController {
       } catch (error) {
          if (error.name === 'SequelizeValidationError') {
             const errors = error.errors.map(err => err.message);
-            return res.redirect(`/home/add?error=${errors.join('||')}`);
+            return res.redirect(`/home/courses/${req.params.id}/edit?error=${errors.join('||')}`);
          }
          // console.log(error);
          res.send(error);

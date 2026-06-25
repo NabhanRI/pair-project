@@ -17,22 +17,19 @@ class TransactionController {
                 return res.redirect('/home?error=Course tidak ditemukan')
             }
 
-            let transaction = await Transaction.findOne({
+            const [transaction, created] = await Transaction.findOrCreate({
                 where: {
                     UserId: user.id,
                     CourseId: course.id
-                }
-            })
-
-            if (!transaction) {
-                transaction = await Transaction.create({
+                },
+                defaults: {
                     UserId: user.id,
                     CourseId: course.id,
                     totalAmount: course.price,
                     paymentStatus: 'unpaid',
                     invoiceNumber: `INV-JSK-${user.id}-${course.id}-${Date.now()}`
-                })
-            }
+                }
+            })
 
             res.render('transaction', { user, course, transaction })
         } catch (error) {
@@ -74,6 +71,37 @@ class TransactionController {
     }
 
     static async finishPayment(req, res) {
+        const user = req.session.user;
+        const { id } = req.params;
+
+        if (!user) {
+            return res.redirect('/?error=Silakan login terlebih dahulu');
+        }
+
+        Transaction.findOne({
+            where: {
+                UserId: user.id,
+                CourseId: id
+            }
+        })
+            .then(transaction => {
+                if (!transaction) {
+                    throw new Error('Transaksi tidak ditemukan');
+                }
+
+                return transaction.update({
+                    paymentStatus: 'paid'
+                });
+            })
+            .then(() => {
+                res.redirect(`/home/courses/${id}/transaction`);
+            })
+            .catch(error => {
+                res.redirect(`/home/courses/${id}/transaction?error=${error.message}`);
+            });
+    }
+
+    static async invoice(req, res) {
         try {
             const user = req.session.user
 
@@ -87,49 +115,19 @@ class TransactionController {
                 where: {
                     UserId: user.id,
                     CourseId: id
-                }
+                },
+                include: [
+                    {
+                        model: Course
+                    }
+                ]
             })
 
             if (!transaction) {
                 return res.redirect(`/home/courses/${id}/transaction?error=Transaksi tidak ditemukan`)
             }
 
-            await transaction.update({
-                paymentStatus: 'paid'
-            })
-
-            res.redirect(`/home/courses/${id}/transaction`)
-            res.render()
-        } catch (error) {
-            res.send(error)
-        }
-    }
-
-    static async invoice(req, res) {
-        try {
-            const user = req.session.user
-
-            if (!user) {
-                return res.redirect('/?error=Silakan login terlebih dahulu')
-            }
-
-            const { id } = req.params
-
-            const course = await Course.findByPk(id)
-            if (!course) {
-                return res.redirect('/home?error=Course tidak ditemukan')
-            }
-
-            const transaction = await Transaction.findOne({
-                where: {
-                    UserId: user.id,
-                    CourseId: course.id
-                }
-            })
-
-            if (!transaction) {
-                return res.redirect(`/home/courses/${id}/transaction?error=Transaksi tidak ditemukan`)
-            }
+            const course = transaction.Course
 
             const data = {
                 currency: "IDR",
@@ -151,10 +149,6 @@ class TransactionController {
                     address: user.email
                 },
 
-                //? ini invoice number
-                invoiceNumber: transaction.invoiceNumber,
-                invoiceDate: new Date(transaction.createdAt).toLocaleDateString('id-ID'),
-
                 products: [
                     {
                         quantity: 1,
@@ -163,12 +157,19 @@ class TransactionController {
                     }
                 ],
 
-                bottomNotice:
-                    `Payment Status: ${transaction.paymentStatus.toUpperCase()} | User ID: ${transaction.UserId} | Course ID: ${transaction.CourseId}`,
+                fields: {
+                    tax: false
+                },
 
                 settings: {
                     currency: "IDR"
-                }
+                },
+
+                bottomNotice: `
+                Invoice Number: ${transaction.invoiceNumber}
+                Tanggal Transaksi: ${new Date(transaction.createdAt).toLocaleDateString('id-ID')}
+                Payment Status: ${transaction.paymentStatus.toUpperCase()}
+                `
             }
 
             const result = await easyinvoice.createInvoice(data)
@@ -179,7 +180,6 @@ class TransactionController {
 
             res.send(pdfBuffer)
         } catch (error) {
-            // console.log(error);
             res.send(error)
         }
     }
