@@ -45,19 +45,13 @@ app.post('/home/add', AdminController.postAdd)
 app.get('/home/courses/:id', HomeController.courseDetail)
 
 // ? (GET) EDIT Course
-app.get('/home/courses/:id/edit', (req, res) => {
-  res.send('Hello World!')
-})
+app.get('/home/courses/:id/edit', AdminController.getEdit)
 
 // ? (POST) EDIT Course
-app.post('/home/courses/:id/edit', (req, res) => {
-  res.send('Hello World!')
-})
+app.post('/home/courses/:id/edit', AdminController.postEdit)
 
 // ? (GET) DELETE Course
-app.get('/home/courses/:id/delete', (req, res) => {
-  res.send('Hello World!')
-})
+app.get('/home/courses/:id/delete', AdminController.deleteCourse)
 
 // ! USER (STUDENT)
 // ? (GET) Transaction

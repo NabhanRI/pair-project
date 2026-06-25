@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: "Deskripsi wajib diisi." },
         notEmpty: { msg: "Deskripsi tidak boleh kosong." },
         len: {
-          args: [10, 100],
+          args: [10],
           msg: "Deskripsi minimal harus 10 karakter."
         }
       }

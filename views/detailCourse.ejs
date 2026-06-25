@@ -94,12 +94,12 @@
             <div class="d-flex gap-3 mt-4">
 
                <% if (user && user.role ==='admin' ) { %>
-                  <a href="#" class="brutal-btn w-50 text-center"
+                  <a href="/home/courses/<%= course.id %>/edit" class="brutal-btn w-50 text-center"
                      style="background: var(--blue); padding: 1rem; font-size: 1.2rem;">
                      EDIT
                   </a>
 
-                  <a href="#" class="brutal-btn w-50 text-center"
+                  <a href="/home/courses/<%= course.id %>/delete" class="brutal-btn w-50 text-center"
                      style="background: var(--pink); padding: 1rem; font-size: 1.2rem;"
                      onclick="return confirm('Yakin ingin menghapus materi JSkuy ini?')">
                      HAPUS
