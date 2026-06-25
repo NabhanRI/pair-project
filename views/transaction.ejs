@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction - JSkuy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/assets/pavicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --pink: #ff90e8;
+            --yellow: #ffc900;
+            --blue: #23a094;
+            --ink: #111;
+            --cream: #f4f4f0;
+            --green: #90ff9a;
+            --red: #ff6b6b;
+        }
+
+        body {
+            background-color: var(--cream);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* ================= NAVBAR ================= */
+        .brutal-nav {
+            background-color: #fff;
+            border-bottom: 4px solid var(--ink);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1.8rem;
+            color: var(--ink) !important;
+            background: var(--green);
+            padding: 0.2rem 1rem;
+            border: 3px solid var(--ink);
+            transform: rotate(-2deg);
+            box-shadow: 4px 4px 0 var(--ink);
+        }
+
+        .nav-link {
+            font-weight: 700;
+            color: var(--ink) !important;
+            font-size: 1.1rem;
+            border: 2px solid transparent;
+            padding: 0.5rem 1rem !important;
+        }
+
+        .nav-link:hover {
+            background-color: var(--yellow);
+            border: 2px solid var(--ink);
+        }
+
+        .brutal-btn {
+            display: inline-block;
+            border: 4px solid var(--ink);
+            box-shadow: 6px 6px 0 var(--ink);
+            font-weight: 900;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .brutal-btn:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 4px 4px 0 var(--ink);
+            color: var(--ink);
+        }
+
+        .brutal-box {
+            background: #fff;
+            border: 6px solid var(--ink);
+            box-shadow: 12px 12px 0 var(--ink);
+        }
+
+        .info-card {
+            border: 4px solid var(--ink);
+            background: #fff;
+            padding: 1.25rem;
+            box-shadow: 6px 6px 0 var(--ink);
+            height: 100%;
+        }
+
+        .label-chip {
+            display: inline-block;
+            background: var(--ink);
+            color: var(--yellow);
+            font-weight: 800;
+            padding: 0.35rem 0.8rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .course-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border: 4px solid var(--ink);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.45rem 0.9rem;
+            border: 3px solid var(--ink);
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0 var(--ink);
+        }
+
+        .status-unpaid {
+            background: var(--red);
+            color: #fff;
+        }
+
+        .status-paid {
+            background: var(--green);
+            color: var(--ink);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.9rem 0;
+            border-bottom: 3px dashed var(--ink);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 800;
+            text-transform: uppercase;
+            min-width: 180px;
+        }
+
+        .detail-value {
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .total-box {
+            background: var(--cream);
+            border: 4px solid var(--ink);
+            box-shadow: 6px 6px 0 var(--ink);
+            padding: 1.25rem;
+        }
+
+        .brutal-footer {
+            margin-top: auto;
+            background: var(--blue);
+            border-top: 4px solid var(--ink);
+            padding: 3rem 0;
+        }
+
+        .footer-title {
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 3px 3px 0 var(--ink);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--ink);
+            font-weight: 800;
+            text-decoration: none;
+            border-bottom: 3px solid var(--ink);
+            margin-right: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-links a:hover {
+            background: var(--yellow);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg brutal-nav sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/home">JSkuy</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                style="border: 3px solid var(--ink); border-radius: 0;">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle brutal-btn text-decoration-none" href="#"
+                            id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="background: var(--pink); font-size: 1rem; padding: 0.5rem 1rem; border-radius: 0;">
+                            HALO, <%= user.username.toUpperCase() %>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="profileDropdown"
+                            style="border: 4px solid var(--ink); border-radius: 0; box-shadow: 6px 6px 0 var(--ink); background: #fff; padding: 0;">
+                            <li>
+                                <a class="dropdown-item fw-bold py-2" href="/profile" style="font-size: 1rem;">Lihat
+                                    Profil</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider m-0" style="border-top: 3px solid var(--ink);">
+                            </li>
+                            <li class="p-2">
+                                <form action="/logout" method="GET" class="m-0">
+                                    <button type="submit" class="brutal-btn w-100"
+                                        style="background: var(--yellow); font-size: 0.9rem; padding: 0.4rem;">KELUAR</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- END NAVBAR -->
+
+    <main class="container py-5 mt-3 mb-5">
+        <div style="max-width: 1000px; margin: 0 auto;">
+
+            <a href="/home" class="brutal-btn text-decoration-none text-dark mb-4 d-inline-block"
+                style="background: #fff; padding: 0.5rem 1rem;">
+                KEMBALI
+            </a>
+
+            <div class="brutal-box p-4 p-md-5" style="background: var(--yellow);">
+                <h1
+                    style="font-family: 'Archivo Black', sans-serif; font-size: 2.5rem; text-transform: uppercase; margin-bottom: 2rem; border-bottom: 6px solid var(--ink); padding-bottom: 1rem;">
+                    + Detail Transaksi
+                </h1>
+
+                <div class="info-card">
+                    <span class="label-chip">Course Dipilih</span>
+
+                    <h2 style="font-family: 'Archivo Black', sans-serif; font-size: 2rem; text-transform: uppercase;">
+                        <%= course.title %>
+                    </h2>
+
+                    <p class="mb-4" style="white-space: pre-line;">
+                        <%= course.description %>
+                    </p>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Invoice Number</div>
+                        <div class="detail-value">
+                            <%= transaction.invoiceNumber %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Nama Pembeli</div>
+                        <div class="detail-value">
+                            <%= user.username %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value">
+                            <%= user.email %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Course</div>
+                        <div class="detail-value">
+                            <%= course.title %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Harga Course</div>
+                        <div class="detail-value">
+                            Rp <%= Number(transaction.totalAmount).toLocaleString('id-ID') %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Payment Status</div>
+                        <div class="detail-value">
+                            <span
+                                class="status-badge <%= transaction.paymentStatus === 'paid' ? 'status-paid' : 'status-unpaid' %>">
+                                <%= transaction.paymentStatus === 'paid' ? 'Sudah Lunas' : 'Belum Lunas' %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOTAL + ACTION -->
+                <div class="mt-4 total-box">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <div>
+                            <div class="fw-bold text-uppercase">Total Pembayaran</div>
+                            <div style="font-family: 'Archivo Black', sans-serif; font-size: 2rem;">
+                                Rp <%= Number(transaction.totalAmount).toLocaleString('id-ID') %>
+                            </div>
+                        </div>
+                        <!-- button penentu -->
+                        <div class="d-flex gap-2 flex-wrap">
+                            <% if (transaction.paymentStatus === 'paid' ) { %>
+                                <a href="/home/courses/<%= course.id %>/invoice" target="_blank"
+                                    class="brutal-btn text-dark"
+                                    style="background: var(--pink); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
+                                    PRINT INVOICE
+                                </a>
+                                <% } else { %>
+                                    <form action="/home/courses/<%= course.id %>/transaction" method="POST" class="m-0">
+                                        <button type="submit" class="brutal-btn text-dark"
+                                            style="background: var(--red); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
+                                            BAYAR SEKARANG
+                                        </button>
+                                    </form>
+                                    <% } %>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="brutal-footer">
+        <div class="container text-center text-md-start">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <h2 class="footer-title">JSkuy.</h2>
+                    <p class="fw-bold fs-5 mb-0" style="color: var(--ink);">Gudang ilmu tanpa batas.</p>
+                </div>
+                <div class="col-md-6 text-md-end footer-links">
+                    <a href="#">Tentang Kami</a>
+                    <a href="#">Bantuan</a>
+                    <a href="#">Syarat & Ketentuan</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

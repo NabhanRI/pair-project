@@ -1,6 +1,7 @@
 const { AuthController } = require('./controllers/authController');
 const { AdminController } = require('./controllers/adminController');
 const { HomeController } = require('./controllers/homeController');
+const { TransactionController } = require('./controllers/transactionController')
 const express = require('express');
 const app = express()
 const port = 3000
@@ -8,6 +9,8 @@ const port = 3000
 
 app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: true }))
+// buat nampilin qr
+app.use(express.static('public'))
 
 // express session
 const session = require("express-session");
@@ -45,25 +48,23 @@ app.post('/home/add', AdminController.postAdd)
 app.get('/home/courses/:id', HomeController.courseDetail)
 
 // ? (GET) EDIT Course
-app.get('/home/courses/:id/edit', (req, res) => {
-  res.send('Hello World!')
-})
+app.get('/home/courses/:id/edit', AdminController.getEdit)
 
 // ? (POST) EDIT Course
-app.post('/home/courses/:id/edit', (req, res) => {
-  res.send('Hello World!')
-})
+app.post('/home/courses/:id/edit', AdminController.postEdit)
 
 // ? (GET) DELETE Course
-app.get('/home/courses/:id/delete', (req, res) => {
-  res.send('Hello World!')
-})
+app.get('/home/courses/:id/delete', AdminController.deleteCourse)
 
 // ! USER (STUDENT)
 // ? (GET) Transaction
-app.get('/home/courses/:id/transaction', (req, res) => {
-  res.send('Hello World!')
-})
+app.get('/home/courses/:id/transaction', TransactionController.formTf)
+app.post('/home/courses/:id/transaction', TransactionController.createPayment)
+
+app.post('/home/courses/:id/transaction/finish', TransactionController.finishPayment)
+
+//? (GET) Invoice
+app.get('/home/courses/:id/invoice', TransactionController.invoice)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
