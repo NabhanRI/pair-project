@@ -283,6 +283,17 @@
             <% } %>
       </div>
 
+      <% if (error) { %>
+         <div style="background: #ffdddd; border: 3px solid var(--ink); padding: 1rem; margin-bottom: 1.5rem; font-weight: bold; color: #b00020;">
+            <%= error %>
+         </div>
+      <% } %>
+      <% if (success) { %>
+         <div style="background: #ddffdd; border: 3px solid var(--ink); padding: 1rem; margin-bottom: 1.5rem; font-weight: bold; color: #1a7a1a;">
+            <%= success %>
+         </div>
+      <% } %>
+
       <!-- CARD COURSE -->
       <div class="row g-4 mb-5">
          <!-- Cek apakah data courses kosong (misal karena keyword tidak ditemukan) -->

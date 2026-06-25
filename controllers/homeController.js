@@ -24,7 +24,7 @@ class HomeController {
 
          const courses = await Course.findAll(queryOptions);
 
-         res.render("home", { courses, user, formatRupiah });
+         res.render("home", { courses, user, formatRupiah, error: req.query.error, success: req.query.success });
       } catch (error) {
          console.log(error);
          res.send(error);
@@ -43,7 +43,7 @@ class HomeController {
             return res.render('errorPage', { message: 'Materi JSkuy tidak ditemukan.' });
          }
 
-         res.render('detailCourse', { course, user });
+         res.render('detailCourse', { course, user, error: req.query.error, success: req.query.success });
       } catch (error) {
          res.send(error)
       }
