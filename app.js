@@ -57,8 +57,9 @@ app.get('/home/courses/:id/delete', AdminController.deleteCourse)
 // ! USER (STUDENT)
 // ? (GET) Transaction
 app.get('/home/courses/:id/transaction', TransactionController.formTf)
+app.post('/home/courses/:id/transaction', TransactionController.createPayment)
 
-app.post('/home/courses/:id/transaction', TransactionController.createTransaction)
+app.post('/home/courses/:id/transaction/pay', TransactionController.finishPayment)
 
 //? (GET) Invoice
 app.get('/home/courses/:id/invoice', TransactionController.invoice)

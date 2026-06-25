@@ -207,7 +207,8 @@
                         <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="profileDropdown"
                             style="border: 4px solid var(--ink); border-radius: 0; box-shadow: 6px 6px 0 var(--ink); background: #fff; padding: 0;">
                             <li>
-                                <a class="dropdown-item fw-bold py-2" href="/profile" style="font-size: 1rem;">Lihat Profil</a>
+                                <a class="dropdown-item fw-bold py-2" href="/profile" style="font-size: 1rem;">Lihat
+                                    Profil</a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider m-0" style="border-top: 3px solid var(--ink);">
@@ -227,93 +228,108 @@
     <!-- END NAVBAR -->
 
     <main class="container py-5 mt-3 mb-5">
-    <div style="max-width: 1000px; margin: 0 auto;">
+        <div style="max-width: 1000px; margin: 0 auto;">
 
-        <a href="/home" class="brutal-btn text-decoration-none text-dark mb-4 d-inline-block"
-            style="background: #fff; padding: 0.5rem 1rem;">
-            KEMBALI
-        </a>
+            <a href="/home" class="brutal-btn text-decoration-none text-dark mb-4 d-inline-block"
+                style="background: #fff; padding: 0.5rem 1rem;">
+                KEMBALI
+            </a>
 
-        <div class="brutal-box p-4 p-md-5" style="background: var(--yellow);">
-            <h1
-                style="font-family: 'Archivo Black', sans-serif; font-size: 2.5rem; text-transform: uppercase; margin-bottom: 2rem; border-bottom: 6px solid var(--ink); padding-bottom: 1rem;">
-                + Detail Transaksi
-            </h1>
+            <div class="brutal-box p-4 p-md-5" style="background: var(--yellow);">
+                <h1
+                    style="font-family: 'Archivo Black', sans-serif; font-size: 2.5rem; text-transform: uppercase; margin-bottom: 2rem; border-bottom: 6px solid var(--ink); padding-bottom: 1rem;">
+                    + Detail Transaksi
+                </h1>
 
-            <div class="info-card">
-                <span class="label-chip">Course Dipilih</span>
+                <div class="info-card">
+                    <span class="label-chip">Course Dipilih</span>
 
-                <h2 style="font-family: 'Archivo Black', sans-serif; font-size: 2rem; text-transform: uppercase;">
-                    <%= course.title %>
-                </h2>
-
-                <p class="mb-4" style="white-space: pre-line;">
-                    <%= course.description %>
-                </p>
-
-                <div class="detail-row">
-                    <div class="detail-label">Nama Pembeli</div>
-                    <div class="detail-value">
-                        <%= user.username %>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-label">Email</div>
-                    <div class="detail-value">
-                        <%= user.email %>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-label">Course</div>
-                    <div class="detail-value">
+                    <h2 style="font-family: 'Archivo Black', sans-serif; font-size: 2rem; text-transform: uppercase;">
                         <%= course.title %>
-                    </div>
-                </div>
+                    </h2>
 
-                <div class="detail-row">
-                    <div class="detail-label">Harga Course</div>
-                    <div class="detail-value">
-                        Rp <%= Number(course.price).toLocaleString('id-ID') %>
-                    </div>
-                </div>
+                    <p class="mb-4" style="white-space: pre-line;">
+                        <%= course.description %>
+                    </p>
 
-                <div class="detail-row">
-                    <div class="detail-label">Payment Status</div>
-                    <div class="detail-value">
-                        <span class="status-badge status-unpaid">
-                            Belum Lunas
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TOTAL + ACTION -->
-            <div class="mt-4 total-box">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                    <div>
-                        <div class="fw-bold text-uppercase">Total Pembayaran</div>
-                        <div style="font-family: 'Archivo Black', sans-serif; font-size: 2rem;">
-                            Rp <%= Number(course.price).toLocaleString('id-ID') %>
+                    <div class="detail-row">
+                        <div class="detail-label">Invoice Number</div>
+                        <div class="detail-value">
+                            <%= transaction.invoiceNumber %>
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2 flex-wrap">
-                        <form action="/transactions/<%= course.id %>/pay" method="POST" class="m-0">
-                            <button type="submit" class="brutal-btn text-dark"
-                                style="background: var(--green); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
-                                BAYAR SEKARANG
-                            </button>
-                        </form>
-                        </a>
+                    <div class="detail-row">
+                        <div class="detail-label">Nama Pembeli</div>
+                        <div class="detail-value">
+                            <%= user.username %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value">
+                            <%= user.email %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Course</div>
+                        <div class="detail-value">
+                            <%= course.title %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Harga Course</div>
+                        <div class="detail-value">
+                            Rp <%= Number(transaction.totalAmount).toLocaleString('id-ID') %>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Payment Status</div>
+                        <div class="detail-value">
+                            <span
+                                class="status-badge <%= transaction.paymentStatus === 'paid' ? 'status-paid' : 'status-unpaid' %>">
+                                <%= transaction.paymentStatus==='paid' ? 'Sudah Lunas' : 'Belum Lunas' %>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+                <!-- TOTAL + ACTION -->
+                <div class="mt-4 total-box">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <div>
+                            <div class="fw-bold text-uppercase">Total Pembayaran</div>
+                            <div style="font-family: 'Archivo Black', sans-serif; font-size: 2rem;">
+                                Rp <%= Number(transaction.totalAmount).toLocaleString('id-ID') %>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 flex-wrap">
+                            <% if (transaction.paymentStatus === 'paid' ) { %>
+                                <a href="/home/courses/<%= course.id %>/invoice" target="_blank"
+                                    class="brutal-btn text-dark"
+                                    style="background: var(--blue); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
+                                    LIHAT INVOICE
+                                </a>
+                                <% } else { %>
+                                    <form action="/home/courses/<%= course.id %>/transaction" method="POST" class="m-0">
+                                        <button type="submit" class="brutal-btn text-dark"
+                                            style="background: var(--green); font-size: 1.2rem; padding: 1rem 2rem; border-radius: 0;">
+                                            BAYAR SEKARANG
+                                        </button>
+                                    </form>
+                                    <% } %>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 
     <footer class="brutal-footer">
         <div class="container text-center text-md-start">

@@ -6,44 +6,100 @@ class TransactionController {
         try {
             const user = req.session.user
 
-        if (!user) {
-            return res.redirect('/?error=Silakan login terlebih dahulu')
-        }
-
-        const { id } = req.params
-        const course = await Course.findByPk(id)
-
-        if (!course) {
-            return res.redirect('/home?error=Course tidak ditemukan')
-        }
-
-        let transaction = await Transaction.findOne({
-            where: {
-                UserId: user.id,
-                CourseId: course.id
+            if (!user) {
+                return res.redirect('/?error=Silakan login terlebih dahulu')
             }
-        })
 
-        if (!transaction) {
-            transaction = await Transaction.create({
-                UserId: user.id,
-                CourseId: course.id,
-                totalAmount: course.price,
-                paymentStatus: 'unpaid',
-                invoiceNumber: `INV-JSK-${user.id}-${course.id}-${Date.now()}`
+            const { id } = req.params
+            const course = await Course.findByPk(id)
+
+            if (!course) {
+                return res.redirect('/home?error=Course tidak ditemukan')
+            }
+
+            let transaction = await Transaction.findOne({
+                where: {
+                    UserId: user.id,
+                    CourseId: course.id
+                }
             })
-        }
 
-        res.render('transaction', { user, course, transaction })
+            if (!transaction) {
+                transaction = await Transaction.create({
+                    UserId: user.id,
+                    CourseId: course.id,
+                    totalAmount: course.price,
+                    paymentStatus: 'unpaid',
+                    invoiceNumber: `INV-JSK-${user.id}-${course.id}-${Date.now()}`
+                })
+            }
+
+            res.render('transaction', { user, course, transaction })
         } catch (error) {
             // console.log(error);
             res.send(error)
         }
     }
 
-    static async createTransaction(req, res) {
+    static async createPayment(req, res) {
         try {
+            const user = req.session.user
 
+            if (!user) {
+                return res.redirect('/?error=Silakan login terlebih dahulu')
+            }
+
+            const { id } = req.params
+
+            const course = await Course.findByPk(id)
+            if (!course) {
+                return res.redirect('/home?error=Course tidak ditemukan')
+            }
+
+            const transaction = await Transaction.findOne({
+                where: {
+                    UserId: user.id,
+                    CourseId: course.id
+                }
+            })
+
+            if (!transaction) {
+                return res.redirect(`/home/courses/${id}/transaction?error=Transaksi tidak ditemukan`)
+            }
+
+            res.render('paymentPage', { user, course, transaction })
+        } catch (error) {
+            res.send(error)
+        }
+    }
+
+    static async finishPayment(req, res) {
+        try {
+            const user = req.session.user
+
+            if (!user) {
+                return res.redirect('/?error=Silakan login terlebih dahulu')
+            }
+
+            const { id } = req.params
+
+            const transaction = await Transaction.findOne({
+                where: {
+                    UserId: user.id,
+                    CourseId: id
+                }
+            })
+
+            if (!transaction) {
+                return res.redirect(`/home/courses/${id}/transaction?error=Transaksi tidak ditemukan`)
+            }
+
+            await transaction.update({
+                paymentStatus: 'paid'
+            })
+
+            res.redirect(`/home/courses/${id}/transaction`)
+            res.render()
         } catch (error) {
             res.send(error)
         }
@@ -51,16 +107,28 @@ class TransactionController {
 
     static async invoice(req, res) {
         try {
-            const user = req.session.user || {
-                username: 'Student JSKuy',
-                email: 'student@jskuy.com'
+            const user = req.session.user
+
+            if (!user) {
+                return res.redirect('/?error=Silakan login terlebih dahulu')
             }
+
             const { id } = req.params
 
             const course = await Course.findByPk(id)
-
             if (!course) {
                 return res.redirect('/home?error=Course tidak ditemukan')
+            }
+
+            const transaction = await Transaction.findOne({
+                where: {
+                    UserId: user.id,
+                    CourseId: course.id
+                }
+            })
+
+            if (!transaction) {
+                return res.redirect(`/home/courses/${id}/transaction?error=Transaksi tidak ditemukan`)
             }
 
             const data = {
@@ -83,30 +151,31 @@ class TransactionController {
                     address: user.email
                 },
 
-                invoiceNumber: `INV-JSK-${course.id}-${Date.now()}`,
-
-                invoiceDate: new Date().toLocaleDateString('id-ID'),
+                //? ini invoice number
+                invoiceNumber: transaction.invoiceNumber,
+                invoiceDate: new Date(transaction.createdAt).toLocaleDateString('id-ID'),
 
                 products: [
                     {
                         quantity: 1,
-                        description: course.title,
-                        price: Number(course.price)
+                        description: `${course.title} (Course ID: ${transaction.CourseId})`,
+                        price: Number(transaction.totalAmount)
                     }
                 ],
 
-                bottomNotice: "Terima kasih telah mendaftar course di JSKuy.",
+                bottomNotice:
+                    `Payment Status: ${transaction.paymentStatus.toUpperCase()} | User ID: ${transaction.UserId} | Course ID: ${transaction.CourseId}`,
+
                 settings: {
                     currency: "IDR"
                 }
             }
 
             const result = await easyinvoice.createInvoice(data)
-
             const pdfBuffer = Buffer.from(result.pdf, 'base64')
 
             res.setHeader('Content-Type', 'application/pdf')
-            res.setHeader('Content-Disposition', `inline; filename=invoice-${course.id}.pdf`)
+            res.setHeader('Content-Disposition', `inline; filename=${transaction.invoiceNumber}.pdf`)
 
             res.send(pdfBuffer)
         } catch (error) {
