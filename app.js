@@ -38,8 +38,8 @@ app.get('/profile', AuthController.showProfile)
 app.get('/home', HomeController.home)
 
 // ? (GET & POST) ADD
-app.get('/home/add', HomeController.getAdd)
-app.post('/home/add', HomeController.postAdd)
+app.get('/home/add', AdminController.getAdd)
+app.post('/home/add', AdminController.postAdd)
 
 // ? (GET) Detail Course
 app.get('/home/courses/:id', HomeController.courseDetail)
