@@ -38,7 +38,7 @@ class AdminController {
             const errors = error.errors.map(err => err.message);
             return res.redirect(`/home/add?error=${errors.join('||')}`);
          }
-         console.log(error);
+         // console.log(error);
          res.send(error)
       }
    }

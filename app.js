@@ -1,6 +1,7 @@
 const { AuthController } = require('./controllers/authController');
 const { AdminController } = require('./controllers/adminController');
 const { HomeController } = require('./controllers/homeController');
+const { TransactionController } = require('./controllers/transactionController')
 const express = require('express');
 const app = express()
 const port = 3000
@@ -55,9 +56,12 @@ app.get('/home/courses/:id/delete', AdminController.deleteCourse)
 
 // ! USER (STUDENT)
 // ? (GET) Transaction
-app.get('/home/courses/:id/transaction', (req, res) => {
-  res.send('Hello World!')
-})
+app.get('/home/courses/:id/transaction', TransactionController.formTf)
+
+app.post('/home/courses/:id/transaction', TransactionController.createTransaction)
+
+//? (GET) Invoice
+app.get('/home/courses/:id/invoice', TransactionController.invoice)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
