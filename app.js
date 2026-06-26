@@ -2,6 +2,7 @@ const { AuthController } = require('./controllers/authController');
 const { AdminController } = require('./controllers/adminController');
 const { HomeController } = require('./controllers/homeController');
 const { TransactionController } = require('./controllers/transactionController')
+const { isLoggedIn, isAdmin } = require('./middlewares/auth');
 const express = require('express');
 const app = express()
 const port = 3000
@@ -45,16 +46,16 @@ app.get('/home/add', AdminController.getAdd)
 app.post('/home/add', AdminController.postAdd)
 
 // ? (GET) Detail Course
-app.get('/home/courses/:id', HomeController.courseDetail)
+app.get('/home/courses/:id', isAdmin, HomeController.courseDetail)
 
 // ? (GET) EDIT Course
-app.get('/home/courses/:id/edit', AdminController.getEdit)
+app.get('/home/courses/:id/edit', isAdmin, AdminController.getEdit)
 
 // ? (POST) EDIT Course
-app.post('/home/courses/:id/edit', AdminController.postEdit)
+app.post('/home/courses/:id/edit', isAdmin, AdminController.postEdit)
 
 // ? (GET) DELETE Course
-app.get('/home/courses/:id/delete', AdminController.deleteCourse)
+app.get('/home/courses/:id/delete', isAdmin, AdminController.deleteCourse)
 
 // ! USER (STUDENT)
 // ? (GET) Transaction

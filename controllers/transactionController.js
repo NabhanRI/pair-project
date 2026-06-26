@@ -5,11 +5,6 @@ class TransactionController {
     static async formTf(req, res) {
         try {
             const user = req.session.user
-
-            if (!user) {
-                return res.redirect('/?error=Silakan login terlebih dahulu')
-            }
-
             const { id } = req.params
             const course = await Course.findByPk(id)
 
@@ -41,11 +36,6 @@ class TransactionController {
     static async createPayment(req, res) {
         try {
             const user = req.session.user
-
-            if (!user) {
-                return res.redirect('/?error=Silakan login terlebih dahulu')
-            }
-
             const { id } = req.params
 
             const course = await Course.findByPk(id)
@@ -74,10 +64,6 @@ class TransactionController {
         const user = req.session.user;
         const { id } = req.params;
 
-        if (!user) {
-            return res.redirect('/?error=Silakan login terlebih dahulu');
-        }
-
         Transaction.findOne({
             where: {
                 UserId: user.id,
@@ -104,11 +90,6 @@ class TransactionController {
     static async invoice(req, res) {
         try {
             const user = req.session.user
-
-            if (!user) {
-                return res.redirect('/?error=Silakan login terlebih dahulu')
-            }
-
             const { id } = req.params
 
             const transaction = await Transaction.findOne({
