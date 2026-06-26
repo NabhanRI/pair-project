@@ -6,7 +6,8 @@ class AuthController {
    // ? (GET) Login
    static async login(req, res) {
       try {
-         res.render("login", { error: req.query.error })
+         const { error } = req.query
+         res.render("login", { error })
       } catch (error) {
          res.send(error)
       }
@@ -19,11 +20,11 @@ class AuthController {
 
          const user = await User.findOne({ where: { email } });
 
-         // Cek kecocokan user DAN password sekaligus
-         if (!user || !(await bcrypt.compare(password, user.password))) {
-            const errorMsg = "Email atau password salah";
-            return res.redirect(`/?error=${errorMsg}`);
-         }
+            // Cek kecocokan user DAN password sekaligus
+            if (!user || !(await bcrypt.compareSync(password, user.password))) {
+               const errorMsg = "Email atau password salah";
+               return res.redirect(`/?error=${errorMsg}`);
+            }
 
          req.session.user = {
             id: user.id,
@@ -45,7 +46,8 @@ class AuthController {
    // ? (GET) Register
    static async register(req, res) {
       try {
-         res.render('register', { error: req.query.error }) //ngerender form regist
+         const { error } = req.query
+         res.render('register', { error }) //ngerender form regist
       } catch (error) {
          res.send(error);
       }
@@ -99,10 +101,6 @@ class AuthController {
    static async showProfile(req, res) {
       try {
          const sessionUser = req.session.user;
-
-         if (!sessionUser) {
-            return res.redirect('/?error=Ups, kamu harus login terlebih dahulu!');
-         }
 
          const userData = await User.findByPk(sessionUser.id, {
             include: Profile

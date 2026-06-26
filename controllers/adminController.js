@@ -7,12 +7,9 @@ class AdminController {
    static async getAdd(req, res) {
       try {
          const user = req.session.user;
+         const { error } = req.query
 
-         if (!user) {
-            return res.redirect('/?error=Ups, kamu harus login terlebih dahulu!');
-         }
-
-         res.render("addCourse", { user, error: req.query.error })
+         res.render("addCourse", { user, error })
       } catch (error) {
          res.send(error)
       }
@@ -48,10 +45,6 @@ class AdminController {
       try {
          const user = req.session.user;
 
-         if (!user) {
-            return res.redirect('/?error=Ups, kamu harus login terlebih dahulu!');
-         }
-
          const { id } = req.params;
          const course = await Course.findByPk(id);
 
@@ -69,10 +62,6 @@ class AdminController {
    static async postEdit(req, res) {
       try {
          const user = req.session.user;
-
-         if (!user) {
-            return res.redirect('/?error=Ups, kamu harus login terlebih dahulu!');
-         }
 
          const { id } = req.params;
          const { title, description, price, imageUrl } = req.body;
@@ -104,20 +93,20 @@ class AdminController {
    static async deleteCourse(req, res) {
       const { id } = req.params;
 
-   Course.findByPk(id)
-      .then(course => {
-         if (!course) {
-            throw new Error('Course tidak ditemukan');
-         }
+      Course.findByPk(id)
+         .then(course => {
+            if (!course) {
+               throw new Error('Course tidak ditemukan');
+            }
 
-         return course.destroy();
-      })
-      .then(() => {
-         res.redirect('/home?success=Course berhasil dihapus');
-      })
-      .catch(error => {
-         res.redirect(`/home?error=${error.message}`);
-      });
+            return course.destroy();
+         })
+         .then(() => {
+            res.redirect('/home?success=Course berhasil dihapus');
+         })
+         .catch(error => {
+            res.redirect(`/home?error=${error.message}`);
+         });
    }
 }
 

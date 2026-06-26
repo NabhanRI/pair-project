@@ -6,11 +6,8 @@ class HomeController {
    // ? (GET) Halaman Utama (Home)
    static async home(req, res) {
       try {
-         const { search } = req.query;
+         const { search, error, success } = req.query;
          const user = req.session.user;
-         if (!user) {
-            return res.redirect('/?error=Ups, kamu harus login terlebih dahulu!');
-         }
 
          let queryOptions = {};
 
@@ -24,7 +21,7 @@ class HomeController {
 
          const courses = await Course.findAll(queryOptions);
 
-         res.render("home", { courses, user, formatRupiah, error: req.query.error, success: req.query.success });
+         res.render("home", { courses, user, formatRupiah, error, success});
       } catch (error) {
          console.log(error);
          res.send(error);
@@ -34,16 +31,17 @@ class HomeController {
    // ? (GET) Halaman Detail Course
    static async courseDetail(req, res) {
       try {
-         // 1. Tangkap dulu 'id' dari URL (/home/courses/:id)
+         const { error, success } = req.query;
          const { id } = req.params;
          const user = req.session.user;
+         
          const course = await Course.getCourseDetail(id, User);
 
          if (!course) {
             return res.render('errorPage', { message: 'Materi JSkuy tidak ditemukan.' });
          }
 
-         res.render('detailCourse', { course, user, error: req.query.error, success: req.query.success });
+         res.render('detailCourse', { course, user, error, success });
       } catch (error) {
          res.send(error)
       }
