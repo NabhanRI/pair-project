@@ -25,6 +25,7 @@ app.use(session({
   }
 }));
 
+
 // ! AUTHENTICATION & PROFILE
 // ? LOGIN
 app.get('/', AuthController.login)
@@ -37,6 +38,9 @@ app.get('/logout', AuthController.logout);
 // ? Profile
 app.get('/profile', AuthController.showProfile)
 
+// ! MELAKUKAN PENGECEKAN APAKAH SUDAH LOGIN APA BELUM
+app.use(isLoggedIn);
+
 // ! LANDING PAGE
 // ? (GET) Home
 app.get('/home', HomeController.home)
@@ -46,7 +50,7 @@ app.get('/home/add', AdminController.getAdd)
 app.post('/home/add', AdminController.postAdd)
 
 // ? (GET) Detail Course
-app.get('/home/courses/:id', isAdmin, HomeController.courseDetail)
+app.get('/home/courses/:id', HomeController.courseDetail)
 
 // ? (GET) EDIT Course
 app.get('/home/courses/:id/edit', isAdmin, AdminController.getEdit)
